@@ -20,22 +20,6 @@ class ConstraintContext:
     contact_constraints: list[ContactConstraint] | None
     pocket_constraints: list[PocketConstraint] | None
 
-    def __str__(self) -> str:
-        return (
-            f"{self.__class__.__name__}("
-            f"\n\tdocking_constraints {self.docking_constraints})"
-            f"\n\tcontact_constraints {self.contact_constraints}"
-            f"\n\tpocket_constraints {self.pocket_constraints}\n)"
-        )
-
-    def pad(self, *args, **kwargs) -> "ConstraintContext":
-        # No-op
-        return ConstraintContext(
-            docking_constraints=self.docking_constraints,
-            contact_constraints=self.contact_constraints,
-            pocket_constraints=self.pocket_constraints,
-        )
-
     def to_dict(self) -> dict[str, Any]:
         return dict(
             docking_constraints=[asdict(c) for c in self.docking_constraints]
