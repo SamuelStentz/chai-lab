@@ -14,6 +14,7 @@ example_ligands = [
 
 example_proteins = [
     "AGSHSMRYFSTSVSRPGRGEPRFIAVGYVDDTQFVR",
+    # modified residues passed as CCD codes
     "(KCJ)(SEP)(PPN)(B3S)(BAL)(PPN)K(NH2)",
     "XDHPX",
 ]
