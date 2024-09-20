@@ -68,7 +68,8 @@ class AllAtomFeatureContext:
                 if self.embedding_context is not None
                 else None
             ),
-            constraint_context=self.constraint_context.pad(max_tokens=n_tokens),
+            # no need to pad
+            constraint_context=self.constraint_context,
         )
 
     def to_dict(self) -> dict[str, Any]:
