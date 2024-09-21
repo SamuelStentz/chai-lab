@@ -343,8 +343,8 @@ class DockingConstraintGenerator(FeatureGenerator):
         chain1_mask: Bool[Tensor, "c1"],
         chain2_mask: Bool[Tensor, "c2"],
     ) -> tuple[Float[Tensor, "n n"], Bool[Tensor, "n n"]]:
-        (c1_posns,) = torch.where(token_asym_id == chain1_asym_id)
-        (c2_posns,) = torch.where(token_asym_id == chain2_asym_id)
+        [c1_posns] = torch.where(token_asym_id == chain1_asym_id)
+        [c2_posns] = torch.where(token_asym_id == chain2_asym_id)
         # make sure we have a coordinate for each position
         assert len(c1_posns) == len(
             chain1_coords
