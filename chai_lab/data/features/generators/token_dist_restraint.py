@@ -48,17 +48,6 @@ class ConstraintGroup:
         )
         return left_asym_id, right_asym_id
 
-    def __str__(self):
-        return (
-            f"ConstraintGroup(left_residue_subchain_id={self.left_residue_subchain_id}, "
-            f"right_residue_subchain_id={self.right_residue_subchain_id}, "
-            f"left_residue_index={self.left_residue_index}, "
-            f"right_residue_index={self.right_residue_index}, "
-            f"right_residue_name={self.right_residue_name}, "
-            f"left_residue_name={self.left_residue_name}, "
-            f"distance_threshold={self.distance_threshold})"
-        )
-
 
 class TokenDistanceRestraint(FeatureGenerator):
     def __init__(
