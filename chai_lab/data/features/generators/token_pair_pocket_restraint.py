@@ -35,8 +35,8 @@ class ConstraintGroup:
     pocket_token_residue_name: str
     # pocket distance threshold
     pocket_distance_threshold: float
-    # optional subchain IDs
 
+    # optional subchain IDs
     def get_chain_and_token_asym_ids(
         self,
         token_subchain_id: UInt8[Tensor, "n 4"],
@@ -53,15 +53,6 @@ class ConstraintGroup:
             token_asym_id=token_asym_id,
         )
         return pocket_chain_asym_id, pocket_token_asym_id
-
-    def __str__(self):
-        return (
-            f"ConstraintGroup(pocket_chain_subchain_id={self.pocket_chain_subchain_id}, "
-            f"pocket_token_subchain_id={self.pocket_token_subchain_id}, "
-            f"pocket_token_residue_index={self.pocket_token_residue_index}, "
-            f"pocket_token_residue_name={self.pocket_token_residue_name}, "
-            f"pocket_distance_threshold={self.pocket_distance_threshold})"
-        )
 
 
 class TokenPairPocketRestraint(FeatureGenerator):
