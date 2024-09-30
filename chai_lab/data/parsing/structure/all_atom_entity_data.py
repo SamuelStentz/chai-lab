@@ -1,12 +1,10 @@
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from functools import cached_property
 
 from chai_lab.data.parsing.structure import sequence
 from chai_lab.data.parsing.structure.entity_type import EntityType
 from chai_lab.data.parsing.structure.residue import Residue
-from chai_lab.data.residue_constants import standard_residue_pdb_codes
 from chai_lab.utils.typing import typecheck
 
 logger = logging.getLogger(__name__)
@@ -35,29 +33,6 @@ class AllAtomEntityData:
         assert (
             len(self.residues) == len(self.full_sequence)
         ), f"{self.__class__.__name__} residues and full_sequence must be the same length"
-
-    @property
-    def missing_residues(self) -> list[Residue]:
-        """
-        Returns a list of missing residues in the entity
-        """
-        return [residue for residue in self.residues if residue.is_missing]
-
-    @cached_property
-    def has_modifications(self) -> bool:
-        """
-        Returns True if the entity has modifications; this only applies to polymers so
-        is always False for ligands, waters, and unknowns.
-        """
-        if self.entity_type not in (
-            EntityType.PROTEIN,
-            EntityType.RNA,
-            EntityType.DNA,
-            EntityType.POLYMER_HYBRID,
-        ):
-            return False
-
-        return any(res.name not in standard_residue_pdb_codes for res in self.residues)
 
     @property
     def is_distillation(self) -> bool:
