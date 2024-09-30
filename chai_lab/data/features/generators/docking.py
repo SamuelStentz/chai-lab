@@ -26,15 +26,18 @@ class ConstraintGroup:
     Container for a docking constraint group --
     collection of chains with inter/intra distance constraints
 
-    This class can be used to specify a set of chains to be
-    grouped together for the docking feature
+    Constraint can specify conformation of single or multiple chains.
     """
 
+    # each constraint is 1 or more chains.
     subchain_ids: list[str]
+    # for each participating chain we provide atom positions
+    atom_center_coords: list[Float[Tensor, "_ 3"]]
+    # and mask showing if we know anything about the positions
+    atom_center_mask: list[Bool[Tensor, "_"]]
+
     noise_sigma: float
     dropout_prob: float
-    atom_center_mask: list[Bool[Tensor, "_"]]
-    atom_center_coords: list[Float[Tensor, "_ 3"]]
 
     def __post_init__(self) -> None:
         """Ensure params are consistent"""
