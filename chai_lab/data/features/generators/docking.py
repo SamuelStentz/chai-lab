@@ -145,14 +145,14 @@ class DockingConstraintGenerator(FeatureGenerator):
     ) -> Tensor:
         prob = default(prob, torch.rand(1).item())
         dropout_single_mask = torch.rand_like(feature.data[..., 0, 0].float()) < prob
-        dropout_pair_mask = und_self(dropout_single_mask, "b i, b j -> b i j")
-        feature = feature.masked_fill(dropout_pair_mask.unsqueeze(-1), self.mask_value)
+        dropout_pair_mask = und_self(dropout_single_mask, "b i, b j -> b i j 1")
+        feature = feature.masked_fill(dropout_pair_mask, self.mask_value)
         return feature
 
     def apply_chain_dropout(
         self, feature: Tensor, token_asym_id: Int[Tensor, "b n"]
     ) -> Tensor:
-        structure_masks = []
+        structure_masks: list[Tensor] = []
         for i in range(token_asym_id.shape[0]):
             data_i, asym_i = feature.data[i], token_asym_id[i]
             unique_asyms = torch.unique(asym_i[asym_i != 0]).tolist()
@@ -164,11 +164,10 @@ class DockingConstraintGenerator(FeatureGenerator):
                 )
                 continue
             asyms_to_mask = torch.tensor(selected_asyms, device=data_i.device)
-            asym_mask = torch.any(asym_i.unsqueeze(-1) == asyms_to_mask, dim=-1)
-            structure_mask = und_self(asym_mask, "i, j -> i j")
-            structure_masks.append(structure_mask)
-        feature_mask = torch.stack(structure_masks, dim=0)
-        feature = feature.masked_fill(feature_mask.unsqueeze(-1), self.mask_value)
+            asym_mask = torch.isin(asym_i, asyms_to_mask)
+            structure_masks.append(und_self(asym_mask, "i, j -> i j"))
+        feature_mask = rearrange(torch.stack(structure_masks), "b i j -> b i j 1")
+        feature = feature.masked_fill(feature_mask, self.mask_value)
         return feature
 
     @typecheck
